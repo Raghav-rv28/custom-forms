@@ -7,7 +7,7 @@ type Props = { children: ReactNode };
 
 const Layout = (props: Props) => {
   return (
-    <div className="flex flex-col min-h-screen min-w-full dark:bg-slate-900 bg-slate-100">
+    <div className="flex flex-col min-h-screen min-w-full bg-background">
       <nav className="h-15 flex justify-between border-b border-border px-4 py-2 items-center">
         <Logo />
         <div className="flex gap-4 items-center">
