@@ -65,6 +65,29 @@ export async function CreateForm(data: formSchemaType) {
   return form.id;
 }
 
+export async function DeleteForm(id: number) {
+  console.log("deleteing this beyotch", id);
+  const user = await currentUser();
+  if (!user) {
+    throw new UserNotFoundError();
+  }
+
+  try {
+    const deleteForm = await prisma.form.delete({
+      where: {
+        userId: user.id,
+        id: id,
+      },
+    });
+    console.log(deleteForm);
+  } catch (error: any) {
+    if (error.code === "P2003") {
+      return "Remove all submissions first!";
+    }
+  }
+  return "200";
+}
+
 export async function GetForms() {
   const user = await currentUser();
   if (!user) {
@@ -127,7 +150,6 @@ export async function PublishForm(id: number) {
 }
 
 export async function GetFormContentByUrl(formUrl: string) {
-  console.log(formUrl);
   const user = await currentUser();
   if (!user) {
     throw new UserNotFoundError();

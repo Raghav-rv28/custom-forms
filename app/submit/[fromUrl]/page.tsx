@@ -10,7 +10,6 @@ async function SubmitPage({
     fromUrl: string;
   };
 }) {
-  console.log(params.fromUrl);
   const form = await GetFormContentByUrl(params.fromUrl);
 
   if (!form) {
@@ -18,7 +17,6 @@ async function SubmitPage({
   }
 
   const formContent = JSON.parse(form.content) as FormElementInstance[];
-
   return <FormSubmitComponent formUrl={params.fromUrl} content={formContent} />;
 }
 

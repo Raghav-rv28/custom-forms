@@ -1,4 +1,8 @@
 import { GetFormStats, GetForms } from "@/actions/form";
+import CreateFormButton from "@/components/custom/CreateFormButton";
+import DeleteFormButton from "@/components/custom/DeleteFormButton";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,21 +11,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ReactNode, Suspense } from "react";
-import { LuView } from "react-icons/lu";
-import { FaWpforms } from "react-icons/fa";
-import { HiCursorClick } from "react-icons/hi";
-import { TbArrowBounce } from "react-icons/tb";
 import { Separator } from "@/components/ui/separator";
-import CreateFormButton from "@/components/custom/CreateFormButton";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Form } from "@prisma/client";
-import { Badge } from "@/components/ui/badge";
 import { formatDistance } from "date-fns";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ReactNode, Suspense } from "react";
 import { BiRightArrowAlt } from "react-icons/bi";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaWpforms } from "react-icons/fa";
+import { HiCursorClick } from "react-icons/hi";
+import { LuView } from "react-icons/lu";
+import { TbArrowBounce } from "react-icons/tb";
 
 export default function Home() {
   return (
@@ -179,11 +179,14 @@ const FormCard = ({ form }: { form: Form }) => {
       </CardContent>
       <CardFooter>
         {form.published && (
-          <Button asChild className="w-full m-3 text-sm gap-4">
-            <Link href={`/forms/${form.id}`}>
-              View Submissions <BiRightArrowAlt />
-            </Link>
-          </Button>
+          <div className="w-full flex flex-row">
+            <Button asChild className="w-5/6 m-3 text-sm gap-4">
+              <Link href={`/forms/${form.id}`}>
+                View Submissions <BiRightArrowAlt />
+              </Link>
+            </Button>
+            <DeleteFormButton id={form.id} />
+          </div>
         )}
         {!form.published && (
           <Button
