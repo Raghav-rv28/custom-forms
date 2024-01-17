@@ -127,9 +127,13 @@ export async function PublishForm(id: number) {
 }
 
 export async function GetFormContentByUrl(formUrl: string) {
+  console.log(formUrl);
   const user = await currentUser();
   if (!user) {
     throw new UserNotFoundError();
+  }
+  if (formUrl === undefined) {
+    throw new Error("aye common man");
   }
   return await prisma.form.update({
     select: {
@@ -147,10 +151,6 @@ export async function GetFormContentByUrl(formUrl: string) {
 }
 
 export async function SubmitForm(formUrl: string, content: string) {
-  const user = await currentUser();
-  if (!user) {
-    throw new UserNotFoundError();
-  }
   return await prisma.form.update({
     data: {
       submissions: {

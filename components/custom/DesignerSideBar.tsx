@@ -16,7 +16,6 @@ const DesignerSideBar = (props: Props) => {
     >
       {!selectedElement && <FormElementsSidebar />}
       {selectedElement && <PropertiesFormSidebar />}
-      <SidebarBtnElement formElement={FormElements.TextField} />
     </aside>
   );
 };

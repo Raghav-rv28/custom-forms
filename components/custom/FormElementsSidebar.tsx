@@ -12,21 +12,21 @@ function FormElementsSidebar() {
         <p className="text-sm text-muted-foreground col-span-1 md:col-span-2 my-2 place-self-start">
           Layout elements
         </p>
-        {/* <SidebarBtnElement formElement={FormElements.TitleField} />
+        <SidebarBtnElement formElement={FormElements.TitleField} />
         <SidebarBtnElement formElement={FormElements.SubTitleField} />
         <SidebarBtnElement formElement={FormElements.ParagraphField} />
         <SidebarBtnElement formElement={FormElements.SeparatorField} />
-        <SidebarBtnElement formElement={FormElements.SpacerField} /> */}
+        <SidebarBtnElement formElement={FormElements.SpacerField} />
 
         <p className="text-sm text-muted-foreground col-span-1 md:col-span-2 my-2 place-self-start">
           Form elements
         </p>
         <SidebarBtnElement formElement={FormElements.TextField} />
-        {/* <SidebarBtnElement formElement={FormElements.NumberField} />
+        <SidebarBtnElement formElement={FormElements.NumberField} />
         <SidebarBtnElement formElement={FormElements.TextAreaField} />
         <SidebarBtnElement formElement={FormElements.DateField} />
         <SidebarBtnElement formElement={FormElements.SelectField} />
-        <SidebarBtnElement formElement={FormElements.CheckboxField} /> */}
+        <SidebarBtnElement formElement={FormElements.CheckboxField} />
       </div>
     </div>
   );
