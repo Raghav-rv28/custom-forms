@@ -96,7 +96,7 @@ const StatsCards = (props: StatsCardsProps) => {
   );
 };
 
-const StatsCard = ({
+export const StatsCard = ({
   title,
   value,
   icon,
