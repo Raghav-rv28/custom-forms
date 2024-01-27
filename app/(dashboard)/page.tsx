@@ -1,24 +1,12 @@
-import { GetFormStats, GetForms } from "@/actions/form";
+import { GetFormStats } from "@/actions/form";
 import CreateFormButton from "@/components/custom/CreateFormButton";
-import DeleteFormButton from "@/components/custom/DeleteFormButton";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { FormCard } from "@/components/custom/FormCard";
+import { GetForms } from "@/actions/form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Form } from "@prisma/client";
-import { formatDistance } from "date-fns";
-import Link from "next/link";
 import { ReactNode, Suspense } from "react";
-import { BiRightArrowAlt } from "react-icons/bi";
-import { FaEdit, FaWpforms } from "react-icons/fa";
+import { FaWpforms } from "react-icons/fa";
 import { HiCursorClick } from "react-icons/hi";
 import { LuView } from "react-icons/lu";
 import { TbArrowBounce } from "react-icons/tb";
@@ -134,12 +122,6 @@ export const StatsCard = ({
   );
 };
 
-const FormCardSkeleton = () => {
-  return (
-    <Skeleton className="border-2 border-primary-/20 h-[190px] w-full"></Skeleton>
-  );
-};
-
 const FormCards = async () => {
   const forms = await GetForms();
   return (
@@ -151,55 +133,8 @@ const FormCards = async () => {
   );
 };
 
-const FormCard = ({ form }: { form: Form }) => {
+const FormCardSkeleton = () => {
   return (
-    <Card className="h-[190px]">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 justify-between">
-          <span className="truncate font-bold">{form.name}</span>
-          {form.published && <Badge>Published</Badge>}
-          {!form.published && <Badge variant={"destructive"}>Draft</Badge>}
-        </CardTitle>
-        <CardDescription className="flex items-center justify-between text-muted-foreground text-sm">
-          {formatDistance(form.createdAt, new Date(), {
-            addSuffix: true,
-          })}
-          {form.published && (
-            <span className="flex items-center gap-2">
-              <LuView className="text-muted-foreground" />
-              <span>{form.visits.toLocaleString()}</span>
-              <FaWpforms className="text-muted-foreground" />
-              <span>{form.submissions.toLocaleString()}</span>
-            </span>
-          )}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="h-[20px] truncate text-sm text-muted-foreground">
-        {form.description || "No Description"}
-      </CardContent>
-      <CardFooter>
-        {form.published && (
-          <div className="w-full flex flex-row">
-            <Button asChild className="w-5/6 m-3 text-sm gap-4">
-              <Link href={`/forms/${form.id}`}>
-                View Submissions <BiRightArrowAlt />
-              </Link>
-            </Button>
-            <DeleteFormButton id={form.id} />
-          </div>
-        )}
-        {!form.published && (
-          <Button
-            variant={"secondary"}
-            asChild
-            className="w-full m-3 text-sm gap-4 rounded"
-          >
-            <Link href={`/builder/${form.id}`}>
-              Edit form <FaEdit />
-            </Link>
-          </Button>
-        )}
-      </CardFooter>
-    </Card>
+    <Skeleton className="border-2 border-primary-/20 h-[190px] w-full"></Skeleton>
   );
 };
