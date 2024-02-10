@@ -151,10 +151,6 @@ export async function PublishForm(id: number) {
 }
 
 export async function GetFormContentByUrl(formUrl: string) {
-  const user = await currentUser();
-  if (!user) {
-    throw new UserNotFoundError();
-  }
   if (formUrl === undefined) {
     throw new Error("aye common man");
   }
