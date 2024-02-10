@@ -22,8 +22,8 @@ import {
 import { format, formatDistance } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Cross1Icon } from "@radix-ui/react-icons";
 import DeleteFormSubmissionButton from "@/components/custom/DeleteFormSubmissionButton";
+import convertToCSV from "@/lib/jsontoCsv";
 
 async function FormDetailPage({
   params,
@@ -161,7 +161,9 @@ async function SubmissionsTable({ id }: { id: number }) {
   return (
     <>
       <h1 className="text-2xl font-bold my-4">Submissions</h1>
-      <div className="rounded-md border">
+      <div>
+        </div>
+      <div className="rounded-md border my-10">
         <Table>
           <TableHeader>
             <TableRow>
