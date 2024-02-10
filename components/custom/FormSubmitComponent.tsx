@@ -16,7 +16,7 @@ function FormSubmitComponent({
   formUrl: string;
 }) {
   const formValues = useRef<{ [key: string]: string }>({});
-  const formErrors = useRef<{ [key: string]: boolean }>({});
+  const formErrors = useRef<{ [key: string]: string }>({});
   const [renderKey, setRenderKey] = useState(new Date().getTime());
 
   const [submitted, setSubmitted] = useState(false);
@@ -25,10 +25,10 @@ function FormSubmitComponent({
   const validateForm: () => boolean = useCallback(() => {
     for (const field of content) {
       const actualValue = formValues.current[field.id] || "";
-      const valid = FormElements[field.type].validate(field, actualValue);
-
+      const {valid, errMsg} = FormElements[field.type].validate(field, actualValue);
+      console.log(valid, errMsg);
       if (!valid) {
-        formErrors.current[field.id] = true;
+        formErrors.current[field.id] = errMsg;
       }
     }
 
@@ -48,11 +48,15 @@ function FormSubmitComponent({
     const validForm = validateForm();
     if (!validForm) {
       setRenderKey(new Date().getTime());
-      toast({
-        title: "Error",
-        description: "please check the form for errors",
-        variant: "destructive",
-      });
+      // show error messages
+      Object.values(formErrors.current).forEach((err)=>{
+        toast({
+          title: "Error",
+          description: err,
+          variant: "destructive",
+        });
+      })
+
       return;
     }
 
@@ -95,7 +99,7 @@ function FormSubmitComponent({
               key={element.id}
               elementInstance={element}
               submitValue={submitValue}
-              isInvalid={formErrors.current[element.id]}
+              isInvalid={Boolean(formErrors.current[element.id])}
               defaultValue={formValues.current[element.id]}
             />
           );

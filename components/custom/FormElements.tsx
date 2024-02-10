@@ -7,7 +7,7 @@ import { SeparatorFieldFormElement } from "../fields/SeparatorField";
 import { SpacerFieldFormElement } from "../fields/SpacerField";
 import { SubTitleFieldFormElement } from "../fields/SubTitleField";
 import { TextAreaFormElement } from "../fields/TextAreaField";
-import { TextFieldFormElement } from "../fields/TextFieldFormElement";
+import { TextField } from "../fields/TextField";
 import { TitleFieldFormElement } from "../fields/TitleField";
 
 export type ElementsType =
@@ -48,7 +48,7 @@ export type FormElement = {
     elementInstance: FormElementInstance;
   }>;
 
-  validate: (formElement: FormElementInstance, currentValue: string) => boolean;
+  validate: (formElement: FormElementInstance, currentValue: string) => {valid: boolean,errMsg: string};
 };
 
 export type FormElementInstance = {
@@ -61,7 +61,7 @@ type FormElementsType = {
   [key in ElementsType]: FormElement;
 };
 export const FormElements: FormElementsType = {
-  TextField: TextFieldFormElement,
+  TextField: TextField,
   TitleField: TitleFieldFormElement,
   SubTitleField: SubTitleFieldFormElement,
   ParagraphField: ParagprahFieldFormElement,

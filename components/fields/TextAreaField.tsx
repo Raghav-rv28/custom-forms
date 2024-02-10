@@ -65,13 +65,13 @@ export const TextAreaFormElement: FormElement = {
   validate: (
     formElement: FormElementInstance,
     currentValue: string
-  ): boolean => {
+  ): {valid: boolean,errMsg: string} => {
     const element = formElement as CustomInstance;
     if (element.extraAttributes.required) {
-      return currentValue.length > 0;
+      return {valid: currentValue.length > 0, errMsg: `The ${formElement.type} is required, please enter its details`};
     }
 
-    return true;
+    return {valid: true, errMsg: ""};
   },
 };
 

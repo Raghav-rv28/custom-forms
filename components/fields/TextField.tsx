@@ -31,12 +31,16 @@ const extraAttributes = {
   helperText: "Helper text",
   required: false,
   placeHolder: "Value here...",
+  validation: "",
+  validationError: "",
 };
 const propertiesSchema = z.object({
   label: z.string().min(2).max(50),
   helperText: z.string().max(200),
   required: z.boolean().default(false),
   placeHolder: z.string().max(50),
+  validation: z.string().max(50),
+  validationError: z.string().max(150),
 });
 const type: ElementsType = "TextField";
 
@@ -99,7 +103,7 @@ function FormComponent({
         onChange={(e) => setValue(e.target.value)}
         onBlur={(e) => {
           if (!submitValue) return;
-          const valid = TextFieldFormElement.validate(element, e.target.value);
+          const valid = TextField.validate(element, e.target.value);
           setError(!valid);
           if (!valid) return;
           submitValue(element.id, e.target.value);
@@ -136,6 +140,8 @@ function PropertiesComponent({
       helperText: element.extraAttributes.helperText,
       required: element.extraAttributes.required,
       placeHolder: element.extraAttributes.placeHolder,
+      validation: "/  /g",
+      validationError: "",
     },
   });
 
@@ -144,7 +150,7 @@ function PropertiesComponent({
   }, [element, form]);
 
   function applyChanges(values: propertiesFormSchemaType) {
-    const { label, helperText, placeHolder, required } = values;
+    const { label, helperText, placeHolder, required, validation, validationError } = values;
     updateElement(element.id, {
       ...element,
       extraAttributes: {
@@ -152,6 +158,8 @@ function PropertiesComponent({
         helperText,
         placeHolder,
         required,
+        validation,
+        validationError,
       },
     });
   }
@@ -250,12 +258,50 @@ function PropertiesComponent({
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="validation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Validation</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+              <FormDescription>Validation built using regex, you can add your own expression which will be evaluated during submission time<br/>Leave empty for no checks </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="validationError"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Validation Error</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+              <FormDescription>Custom Error that can be shown on regex check not matching </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </form>
     </Form>
   );
 }
 
-export const TextFieldFormElement: FormElement = {
+export const TextField: FormElement = {
   type,
   construct: (id: string) => ({
     id,
@@ -272,12 +318,17 @@ export const TextFieldFormElement: FormElement = {
   validate: (
     formElement: FormElementInstance,
     currentValue: string
-  ): boolean => {
+  ): {valid:boolean, errMsg:string} => {
     const element = formElement as CustomInstance;
+    let returnValue = {valid : true, errMsg: ""}
     if (element.extraAttributes.required) {
-      return currentValue.length > 0;
+      returnValue = currentValue.length > 0 ? {valid: true, errMsg: ""} : {valid: false, errMsg: "The field is required, please enter a value!"};
     }
-
-    return true;
+    
+    if(element.extraAttributes.validation !== "") {
+      const exp = new RegExp(element.extraAttributes.validation)
+      returnValue = exp.test(currentValue) ? {valid: false, errMsg: element.extraAttributes.validationError} : {valid: true, errMsg: ""} ;
+    }
+    return returnValue;
   },
 };
