@@ -1,4 +1,4 @@
-import { GetFormById, GetFormWithSubmissions } from "@/actions/form";
+import { DeleteFormSubmissionData, GetFormById, GetFormWithSubmissions } from "@/actions/form";
 import FormLinkShare from "@/components/custom/FormLinkShare";
 import VisitBtn from "@/components/custom/visitBtn";
 import React, { ReactNode } from "react";
@@ -22,6 +22,8 @@ import {
 import { format, formatDistance } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Cross1Icon } from "@radix-ui/react-icons";
+import DeleteFormSubmissionButton from "@/components/custom/DeleteFormSubmissionButton";
 
 async function FormDetailPage({
   params,
@@ -108,6 +110,7 @@ export default FormDetailPage;
 
 type Row = { [key: string]: string } & {
   submittedAt: Date;
+  submissionId: number;
 };
 
 async function SubmissionsTable({ id }: { id: number }) {
@@ -150,6 +153,7 @@ async function SubmissionsTable({ id }: { id: number }) {
     const content = JSON.parse(submission.content);
     rows.push({
       ...content,
+      submissionId: submission.id,
       submittedAt: submission.createdAt,
     });
   });
@@ -186,6 +190,9 @@ async function SubmissionsTable({ id }: { id: number }) {
                     addSuffix: true,
                   })}
                 </TableCell>
+                <TableCell className="text-muted-foreground justify-end flex">
+                  <DeleteFormSubmissionButton  id={id} submissionId={row.submissionId}/>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -212,3 +219,4 @@ function RowCell({ type, value }: { type: ElementsType; value: string }) {
 
   return <TableCell>{node}</TableCell>;
 }
+

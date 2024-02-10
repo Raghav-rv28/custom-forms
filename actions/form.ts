@@ -3,6 +3,7 @@
 import { currentUser } from "@clerk/nextjs";
 import prisma from "@/lib/prisma";
 import { formSchema, formSchemaType } from "@/schemas/form";
+import { revalidatePath } from "next/cache";
 
 class UserNotFoundError extends Error {}
 
@@ -73,13 +74,13 @@ export async function DeleteForm(id: number) {
   }
 
   try {
-    const deleteForm = await prisma.form.delete({
+    await prisma.form.delete({
       where: {
         userId: user.id,
         id: id,
       },
     });
-    console.log(deleteForm);
+    revalidatePath(`/`)
   } catch (error: any) {
     if (error.code === "P2003") {
       return "Remove all submissions first!";
@@ -206,4 +207,20 @@ export async function GetFormWithSubmissions(id: number) {
       FormSubmissions: true,
     },
   });
+}
+
+export async function DeleteFormSubmissionData(formId: number, submissionId: number) {
+  const user = await currentUser();
+  if (!user) {
+    throw new UserNotFoundError();
+  }
+  console.log(`id: ${submissionId} formId: ${formId}`)
+  try {
+    const res = await prisma.formSubmissions.delete({
+      where: { id: submissionId, formId: formId },
+    });
+    revalidatePath(`/forms/${formId}`)
+  } catch (error: any) {
+    console.log(error);
+  }
 }
