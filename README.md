@@ -1,3 +1,5 @@
+![image](https://github.com/Raghav-rv28/custom-forms/assets/62635473/97f0cfc1-d8c7-4ca3-a467-ac3f44654fe8)
+
 # Features
 1. Added Custom Regex Validation on Input Components like TextField, TextArea Etc.
 2. Added ability to delete Form Submissions
